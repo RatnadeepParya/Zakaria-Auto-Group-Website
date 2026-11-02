@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zakaria-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: zakaria_user
+      POSTGRES_PASSWORD: zakaria_secure_pass_2026
+      POSTGRES_DB: zakaria_auto_group
+    ports:
+      - "5432:5432"
+    volumes:
+      - zakaria_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zakaria_user -d zakaria_auto_group"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  zakaria_pgdata:
+    driver: local

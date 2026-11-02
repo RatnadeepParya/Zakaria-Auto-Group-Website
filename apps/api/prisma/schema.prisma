@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+  INACTIVE
+}
+
+enum ApplicationStatus {
+  SUBMITTED
+  REVIEWING
+  APPROVED
+  DECLINED
+}
+
+enum MessageStatus {
+  NEW
+  CONTACTED
+  RESOLVED
+  SPAM
+}
+
+model User {
+  id              String             @id @default(cuid())
+  email           String             @unique
+  passwordHash    String
+  firstName       String
+  lastName        String
+  phone           String?
+  role            UserRole           @default(USER)
+  emailVerified   Boolean            @default(false)
+  isActive        Boolean            @default(true)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  applications    CreditApplication[]
+  auditEvents     AuditLog[]         @relation("AuditActor")
+
+  @@index([role, emailVerified])
+}
+
+model Vehicle {
+  id            String             @id @default(cuid())
+  vin           String             @unique
+  make          String
+  model         String
+  year          Int
+  priceCents    Int
+  mileage       Int
+  bodyType      String
+  transmission  String             @default("Automatic")
+  fuelType      String             @default("Gasoline")
+  drivetrain    String             @default("FWD")
+  exteriorColor String?
+  interiorColor String?
+  description   String?
+  imageUrl      String?
+  status        VehicleStatus      @default(AVAILABLE)
+  featured      Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  messages      ContactMessage[]
+  applications  CreditApplication[]
+
+  @@index([status, make, model])
+  @@index([year, priceCents])
+  @@index([bodyType, status])
+}
+
+model ContactMessage {
+  id        String        @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  message   String
+  vehicleId String?
+  vehicle   Vehicle?      @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  status    MessageStatus @default(NEW)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([status, createdAt])
+  @@index([vehicleId])
+}
+
+model CreditApplication {
+  id                     String            @id @default(cuid())
+  userId                 String?
+  user                   User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  vehicleId              String?
+  vehicle                Vehicle?          @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  
+  // Step 1: Personal Info
+  firstName              String
+  lastName               String
+  email                  String
+  phone                  String
+  dateOfBirth            String
+  ssnLast4               String?
+  ssnEncrypted           String?
+  driversLicenseNumber   String?
+  driversLicenseState    String?
+  driversLicenseExpiry   String?
+
+  // Step 2: Address
+  addressLine1           String
+  addressLine2           String?
+  city                   String
+  state                  String
+  postalCode             String
+  housingStatus          String?
+  monthlyPayment         Int?
+
+  // Step 3: Employment
+  employmentStatus       String
+  employerName           String?
+  jobTitle               String?
+  annualIncomeCents      Int?
+  yearsEmployed          Int?
+
+  // Application Lifecycle
+  status                 ApplicationStatus @default(SUBMITTED)
+  notes                  String?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  action     String
+  entityType String
+  entityId   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([actorId, createdAt])
+  @@index([entityType, entityId])
+}
