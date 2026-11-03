@@ -19,6 +19,9 @@ export const metadata: Metadata = {
     description: "Quality pre-owned selection, transparent pricing, and trusted service in Marietta, GA.",
     type: "website",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

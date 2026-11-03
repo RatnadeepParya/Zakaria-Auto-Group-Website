@@ -4,7 +4,7 @@ const getBaseUrl = (): string => {
   // Client-side requests use relative path to utilize Next.js rewrites
   if (typeof window !== "undefined") return "";
   // Server-side requests use full internal API URL
-  return process.env.API_URL || "http://localhost:4000";
+  return (process.env.API_URL || "http://localhost:4000").replace(/\/$/, "");
 };
 
 export async function apiRequest<T>(

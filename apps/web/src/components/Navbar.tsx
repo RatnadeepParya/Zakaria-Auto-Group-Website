@@ -61,7 +61,7 @@ export default function Navbar() {
             />
           </svg>
           <span className="brand-text">ZAKARIA</span>
-          <span className="brand-subtext">A U T O &nbsp; G R O U P &nbsp; L L C</span>
+          <span className="brand-subtext">Auto Group</span>
         </Link>
 
         {/* Desktop Navigation Links */}

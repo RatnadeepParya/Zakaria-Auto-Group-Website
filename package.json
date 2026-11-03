@@ -9,7 +9,12 @@
   "scripts": {
     "dev": "concurrently -k -n API,WEB -c blue,green \"npm run dev -w @zakaria/api\" \"npm run dev -w @zakaria/web\"",
     "build": "npm run build -w @zakaria/api && npm run build -w @zakaria/web",
+    "build:api": "npm run db:generate -w @zakaria/api && npm run build -w @zakaria/api",
+    "build:web": "npm run build -w @zakaria/web",
     "start": "concurrently -k -n API,WEB -c blue,green \"npm run start -w @zakaria/api\" \"npm run start -w @zakaria/web\"",
+    "start:api": "npm run start -w @zakaria/api",
+    "start:web": "npm run start -w @zakaria/web",
+    "render:api": "npm run db:generate -w @zakaria/api && npm run build -w @zakaria/api && npm run db:deploy -w @zakaria/api && npm run db:seed -w @zakaria/api",
     "lint": "npm run lint -w @zakaria/api && npm run lint -w @zakaria/web",
     "db:generate": "npm run db:generate -w @zakaria/api",
     "db:migrate": "npm run db:migrate -w @zakaria/api",

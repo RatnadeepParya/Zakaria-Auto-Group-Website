@@ -61,9 +61,9 @@ async function startServer(): Promise<void> {
     process.on(signal, () => initiateShutdown(signal, 0));
   }
 
-  server.listen(env.PORT, () => {
+  server.listen(env.PORT, "0.0.0.0", () => {
     logger.info(
-      { port: env.PORT, environment: env.NODE_ENV },
+      { port: env.PORT, host: "0.0.0.0", environment: env.NODE_ENV },
       "Zakaria Auto Group API server is online and operational"
     );
   });

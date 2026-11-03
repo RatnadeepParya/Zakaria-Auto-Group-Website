@@ -33,11 +33,11 @@ export default function Footer() {
                 strokeLinecap="round"
               />
             </svg>
-            <span style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "6px", color: "#fff" }}>
+            <span style={{ fontSize: "24px", fontWeight: 800, letterSpacing: "5px", color: "#fff" }}>
               ZAKARIA
             </span>
-            <span style={{ fontSize: "10px", letterSpacing: "4px", color: "var(--muted)", marginTop: "4px" }}>
-              A U T O &nbsp; G R O U P &nbsp; L L C
+            <span style={{ fontSize: "11px", letterSpacing: "3px", textTransform: "uppercase", color: "var(--neon-blue)", fontWeight: 600, marginTop: "4px" }}>
+              Auto Group
             </span>
           </div>
 

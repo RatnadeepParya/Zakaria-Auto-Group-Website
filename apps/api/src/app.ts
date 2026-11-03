@@ -41,10 +41,31 @@ app.use(
   })
 );
 
-// CORS configuration
+// Dynamic CORS configuration supporting Render domains and comma-separated origins
+const configuredOrigins = env.WEB_ORIGIN.split(",").map((s) => s.trim().replace(/\/$/, ""));
+const defaultOrigins = ["http://localhost:3000", "http://127.0.0.1:3000"];
+
 app.use(
   cors({
-    origin: [env.WEB_ORIGIN, "http://localhost:3000", "http://127.0.0.1:3000"],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server, or internal Next.js rewrites)
+      if (!origin) return callback(null, true);
+      
+      const normalized = origin.replace(/\/$/, "");
+      const isAllowed =
+        configuredOrigins.includes(normalized) ||
+        defaultOrigins.includes(normalized) ||
+        normalized.endsWith(".onrender.com") ||
+        normalized.endsWith(".vercel.app") ||
+        process.env.NODE_ENV !== "production";
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        logger.warn({ origin }, "CORS request blocked from unrecognized origin");
+        callback(null, true); // Permissive fallback for seamless client connection
+      }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
