@@ -20,7 +20,7 @@ The repository includes a root [`render.yaml`](./render.yaml) blueprint specific
 2. **Create New Blueprint Instance**:
    - Click the **New +** button in the top navigation bar.
    - Select **Blueprint**.
-   - Connect your GitHub repository: `RatnadeepParya/Zakaria-Auto-Group-Website`.
+   - Connect your GitHub repository: `<your-github-account>/Zakaria-Auto-Group-Website`.
    - Click **Connect**.
 
 3. **Deploy Blueprint**:
@@ -59,7 +59,7 @@ If you prefer setting up services individually in Render:
 
 ### 2. Create the Backend API Service:
 - Click **New +** ➔ **Web Service**.
-- Connect `RatnadeepParya/Zakaria-Auto-Group-Website`.
+- Connect `<your-github-account>/Zakaria-Auto-Group-Website`.
 - **Name**: `zakaria-api`
 - **Environment**: `Node`
 - **Branch**: `master`
@@ -79,7 +79,7 @@ If you prefer setting up services individually in Render:
 
 ### 3. Create the Frontend Web Service:
 - Click **New +** ➔ **Web Service**.
-- Connect `RatnadeepParya/Zakaria-Auto-Group-Website`.
+- Connect `<your-github-account>/Zakaria-Auto-Group-Website`.
 - **Name**: `zakaria-web`
 - **Environment**: `Node`
 - **Branch**: `master`
